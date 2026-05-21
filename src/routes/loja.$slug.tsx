@@ -57,7 +57,7 @@ function ProductPage() {
             <p className="mt-6 text-muted-foreground leading-relaxed">{product.description}</p>
 
             <ul className="mt-6 space-y-2">
-              {product.badges.map((b) => (
+              {product.badges.map((b: string) => (
                 <li key={b} className="flex items-center gap-2 text-sm">
                   <Check className="size-4 text-secondary" /> {b}
                 </li>
