@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 export const Route = createFileRoute("/carrinho")({
   component: Carrinho,
@@ -18,41 +18,10 @@ export const Route = createFileRoute("/carrinho")({
 
 function Carrinho() {
   const { items, totalItems, totalPrice, removeItem, updateQuantity, clearCart } = useCart();
-  const [form, setForm] = useState({
-    nome: "",
-    telefone: "",
-    rua: "",
-    numero: "",
-    bairro: "",
-    cidade: "",
-    complemento: "",
-    observacoes: "",
-  });
-  const updateField = (field: string, value: string) =>
-    setForm((prev) => ({ ...prev, [field]: value }));
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback((whatsappText: string) => {
     window.open(`https://wa.me/5562983290822?text=${whatsappText}`, "_blank", "noreferrer");
-  };
-
-  const customerBlock = [
-    form.nome && `Nome: ${form.nome}`,
-    form.telefone && `Telefone: ${form.telefone}`,
-    (form.rua || form.numero) && `Endereço: ${form.rua}${form.numero ? `, ${form.numero}` : ""}`,
-    form.bairro && `Bairro: ${form.bairro}`,
-    form.cidade && `Cidade: ${form.cidade}`,
-    form.complemento && `Complemento: ${form.complemento}`,
-    form.observacoes && `Observações: ${form.observacoes}`,
-  ].filter(Boolean);
-
-  const whatsappText = encodeURIComponent(
-    `Olá! Gostaria de finalizar o pedido:\n\n${items
-      .map(
-        (i) =>
-          `• ${i.product.name} (${i.quantity}x) — R$ ${(i.product.price * i.quantity).toFixed(2).replace(".", ",")}`,
-      )
-      .join("\n")}\n\nTotal: R$ ${totalPrice.toFixed(2).replace(".", ",")}${customerBlock.length ? `\n\n--- Dados do Cliente ---\n${customerBlock.join("\n")}` : ""}`,
-  );
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -116,76 +85,131 @@ function Carrinho() {
               </div>
             ))}
 
-            <div className="bg-card border border-border rounded-2xl mt-6">
-              <div className="p-6 pb-0">
-                <h2 className="font-heading font-semibold">Dados de entrega</h2>
-                <p className="text-xs text-muted-foreground mt-1 mb-6">Preencha para incluirmos no pedido</p>
-                <div className="space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Nome completo</label>
-                      <input value={form.nome} onChange={(e) => updateField("nome", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Telefone / WhatsApp</label>
-                      <input value={form.telefone} onChange={(e) => updateField("telefone", e.target.value)} placeholder="(62) 99999-0000" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
-                    </div>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-[1fr_100px]">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Rua</label>
-                      <input value={form.rua} onChange={(e) => updateField("rua", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Número</label>
-                      <input value={form.numero} onChange={(e) => updateField("numero", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
-                    </div>
-                  </div>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Bairro</label>
-                      <input value={form.bairro} onChange={(e) => updateField("bairro", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-muted-foreground">Cidade</label>
-                      <input value={form.cidade} onChange={(e) => updateField("cidade", e.target.value)} placeholder="Goiânia" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground">Complemento</label>
-                    <input value={form.complemento} onChange={(e) => updateField("complemento", e.target.value)} placeholder="Apto, bloco, referência..." className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-muted-foreground">Observações</label>
-                    <textarea value={form.observacoes} onChange={(e) => updateField("observacoes", e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition resize-none" />
-                  </div>
-                </div>
-              </div>
-              <div className="border-t border-border mt-6" />
-              <div className="p-6">
-                <div className="flex justify-between text-lg">
-                  <span className="text-muted-foreground">Total</span>
-                  <span className="font-bold">R$ {totalPrice.toFixed(2).replace(".", ",")}</span>
-                </div>
-                <button
-                  onClick={handleSubmit}
-                  className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 cursor-pointer"
-                >
-                  Finalizar pedido no WhatsApp
-                </button>
-                <button
-                  onClick={clearCart}
-                  className="mt-3 w-full text-xs text-muted-foreground hover:text-foreground text-center cursor-pointer"
-                >
-                  Limpar carrinho
-                </button>
-              </div>
-            </div>
+            <DeliveryForm totalPrice={totalPrice} clearCart={clearCart} onSend={handleSubmit} />
           </div>
         )}
       </section>
       <SiteFooter />
       <WhatsAppButton />
+    </div>
+  );
+}
+
+function DeliveryForm({
+  totalPrice,
+  clearCart,
+  onSend,
+}: {
+  totalPrice: number;
+  clearCart: () => void;
+  onSend: (text: string) => void;
+}) {
+  const { items } = useCart();
+  const [form, setForm] = useState({
+    nome: "",
+    telefone: "",
+    rua: "",
+    numero: "",
+    bairro: "",
+    cidade: "",
+    complemento: "",
+    observacoes: "",
+  });
+  const updateField = (field: string, value: string) =>
+    setForm((prev) => ({ ...prev, [field]: value }));
+
+  const customerBlock = useMemo(
+    () =>
+      [
+        form.nome && `Nome: ${form.nome}`,
+        form.telefone && `Telefone: ${form.telefone}`,
+        (form.rua || form.numero) && `Endereço: ${form.rua}${form.numero ? `, ${form.numero}` : ""}`,
+        form.bairro && `Bairro: ${form.bairro}`,
+        form.cidade && `Cidade: ${form.cidade}`,
+        form.complemento && `Complemento: ${form.complemento}`,
+        form.observacoes && `Observações: ${form.observacoes}`,
+      ].filter(Boolean),
+    [form],
+  );
+
+  const whatsappText = useMemo(
+    () =>
+      encodeURIComponent(
+        `Olá! Gostaria de finalizar o pedido:\n\n${items
+          .map(
+            (i) =>
+              `• ${i.product.name} (${i.quantity}x) — R$ ${(i.product.price * i.quantity).toFixed(2).replace(".", ",")}`,
+          )
+          .join("\n")}\n\nTotal: R$ ${totalPrice.toFixed(2).replace(".", ",")}${customerBlock.length ? `\n\n--- Dados do Cliente ---\n${customerBlock.join("\n")}` : ""}`,
+      ),
+    [items, totalPrice, customerBlock],
+  );
+
+  return (
+    <div className="bg-card border border-border rounded-2xl mt-6">
+      <div className="p-6 pb-0">
+        <h2 className="font-heading font-semibold">Dados de entrega</h2>
+        <p className="text-xs text-muted-foreground mt-1 mb-6">Preencha para incluirmos no pedido</p>
+        <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Nome completo</label>
+              <input value={form.nome} onChange={(e) => updateField("nome", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Telefone / WhatsApp</label>
+              <input value={form.telefone} onChange={(e) => updateField("telefone", e.target.value)} placeholder="(62) 99999-0000" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-[1fr_100px]">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Rua</label>
+              <input value={form.rua} onChange={(e) => updateField("rua", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Número</label>
+              <input value={form.numero} onChange={(e) => updateField("numero", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Bairro</label>
+              <input value={form.bairro} onChange={(e) => updateField("bairro", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Cidade</label>
+              <input value={form.cidade} onChange={(e) => updateField("cidade", e.target.value)} placeholder="Goiânia" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Complemento</label>
+            <input value={form.complemento} onChange={(e) => updateField("complemento", e.target.value)} placeholder="Apto, bloco, referência..." className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-muted-foreground">Observações</label>
+            <textarea value={form.observacoes} onChange={(e) => updateField("observacoes", e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition resize-none" />
+          </div>
+        </div>
+      </div>
+      <div className="border-t border-border mt-6" />
+      <div className="p-6">
+        <div className="flex justify-between text-lg">
+          <span className="text-muted-foreground">Total</span>
+          <span className="font-bold">R$ {totalPrice.toFixed(2).replace(".", ",")}</span>
+        </div>
+        <button
+          onClick={() => onSend(whatsappText)}
+          className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 cursor-pointer"
+        >
+          Finalizar pedido no WhatsApp
+        </button>
+        <button
+          onClick={clearCart}
+          className="mt-3 w-full text-xs text-muted-foreground hover:text-foreground text-center cursor-pointer"
+        >
+          Limpar carrinho
+        </button>
+      </div>
     </div>
   );
 }
