@@ -1,8 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import type { Product } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 import { toast } from "sonner";
-import { useNavigate } from "@tanstack/react-router";
+import { ShoppingBag } from "lucide-react";
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -54,9 +54,10 @@ export function ProductCard({ product }: { product: Product }) {
                 },
               });
             }}
-            className="flex-1 bg-primary text-primary-foreground px-3 py-2 rounded-lg font-heading font-semibold text-xs hover:bg-primary/90 transition cursor-pointer"
+            className="size-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition cursor-pointer shrink-0"
+            aria-label="Adicionar ao carrinho"
           >
-            Adicionar no carrinho
+            <ShoppingBag className="size-4" />
           </button>
         </div>
       </div>
