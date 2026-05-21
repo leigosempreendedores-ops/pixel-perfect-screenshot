@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import anna from "@/assets/anna.jpg";
+import annaVideo from "@/assets/anna.mp4";
 
 export const Route = createFileRoute("/sobre")({
   component: Sobre,
@@ -20,7 +20,7 @@ function Sobre() {
       <SiteHeader />
       <section className="mx-auto max-w-6xl px-6 py-20 grid gap-16 lg:grid-cols-[1fr_1.2fr] items-start">
         <div className="lg:sticky lg:top-28">
-          <img src={anna} alt="Anna Lorena" width={1024} height={1280} className="rounded-2xl object-cover aspect-[4/5] w-full" />
+          <video src={annaVideo} autoPlay muted loop playsInline className="rounded-2xl object-cover aspect-[4/5] w-full" />
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.25em] text-secondary font-heading font-semibold">Sobre</p>
