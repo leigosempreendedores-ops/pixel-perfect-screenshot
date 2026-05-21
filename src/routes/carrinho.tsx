@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
-import { useState, useCallback, useMemo } from "react";
+import { useCallback, useRef } from "react";
 
 export const Route = createFileRoute("/carrinho")({
   component: Carrinho,
@@ -105,45 +105,38 @@ function DeliveryForm({
   onSend: (text: string) => void;
 }) {
   const { items } = useCart();
-  const [form, setForm] = useState({
-    nome: "",
-    telefone: "",
-    rua: "",
-    numero: "",
-    bairro: "",
-    cidade: "",
-    complemento: "",
-    observacoes: "",
-  });
-  const updateField = (field: string, value: string) =>
-    setForm((prev) => ({ ...prev, [field]: value }));
+  const nomeRef = useRef<HTMLInputElement>(null);
+  const telefoneRef = useRef<HTMLInputElement>(null);
+  const ruaRef = useRef<HTMLInputElement>(null);
+  const numeroRef = useRef<HTMLInputElement>(null);
+  const bairroRef = useRef<HTMLInputElement>(null);
+  const cidadeRef = useRef<HTMLInputElement>(null);
+  const complementoRef = useRef<HTMLInputElement>(null);
+  const observacoesRef = useRef<HTMLTextAreaElement>(null);
 
-  const customerBlock = useMemo(
-    () =>
-      [
-        form.nome && `Nome: ${form.nome}`,
-        form.telefone && `Telefone: ${form.telefone}`,
-        (form.rua || form.numero) && `Endereço: ${form.rua}${form.numero ? `, ${form.numero}` : ""}`,
-        form.bairro && `Bairro: ${form.bairro}`,
-        form.cidade && `Cidade: ${form.cidade}`,
-        form.complemento && `Complemento: ${form.complemento}`,
-        form.observacoes && `Observações: ${form.observacoes}`,
-      ].filter(Boolean),
-    [form],
-  );
+  const buildWhatsappText = () => {
+    const get = (ref: { current: HTMLInputElement | HTMLTextAreaElement | null }) =>
+      ref.current?.value ?? "";
 
-  const whatsappText = useMemo(
-    () =>
-      encodeURIComponent(
-        `Olá! Gostaria de finalizar o pedido:\n\n${items
-          .map(
-            (i) =>
-              `• ${i.product.name} (${i.quantity}x) — R$ ${(i.product.price * i.quantity).toFixed(2).replace(".", ",")}`,
-          )
-          .join("\n")}\n\nTotal: R$ ${totalPrice.toFixed(2).replace(".", ",")}${customerBlock.length ? `\n\n--- Dados do Cliente ---\n${customerBlock.join("\n")}` : ""}`,
-      ),
-    [items, totalPrice, customerBlock],
-  );
+    const customerBlock = [
+      get(nomeRef) && `Nome: ${get(nomeRef)}`,
+      get(telefoneRef) && `Telefone: ${get(telefoneRef)}`,
+      (get(ruaRef) || get(numeroRef)) && `Endereço: ${get(ruaRef)}${get(numeroRef) ? `, ${get(numeroRef)}` : ""}`,
+      get(bairroRef) && `Bairro: ${get(bairroRef)}`,
+      get(cidadeRef) && `Cidade: ${get(cidadeRef)}`,
+      get(complementoRef) && `Complemento: ${get(complementoRef)}`,
+      get(observacoesRef) && `Observações: ${get(observacoesRef)}`,
+    ].filter(Boolean);
+
+    const text = `Olá! Gostaria de finalizar o pedido:\n\n${items
+      .map(
+        (i) =>
+          `• ${i.product.name} (${i.quantity}x) — R$ ${(i.product.price * i.quantity).toFixed(2).replace(".", ",")}`,
+      )
+      .join("\n")}\n\nTotal: R$ ${totalPrice.toFixed(2).replace(".", ",")}${customerBlock.length ? `\n\n--- Dados do Cliente ---\n${customerBlock.join("\n")}` : ""}`;
+
+    return encodeURIComponent(text);
+  };
 
   return (
     <div className="bg-card border border-border rounded-2xl mt-6">
@@ -154,40 +147,40 @@ function DeliveryForm({
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="text-xs font-medium text-muted-foreground">Nome completo</label>
-              <input value={form.nome} onChange={(e) => updateField("nome", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <input ref={nomeRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
             </div>
             <div>
               <label className="text-xs font-medium text-muted-foreground">Telefone / WhatsApp</label>
-              <input value={form.telefone} onChange={(e) => updateField("telefone", e.target.value)} placeholder="(62) 99999-0000" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <input ref={telefoneRef} defaultValue="" placeholder="(62) 99999-0000" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-[1fr_100px]">
             <div>
               <label className="text-xs font-medium text-muted-foreground">Rua</label>
-              <input value={form.rua} onChange={(e) => updateField("rua", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <input ref={ruaRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
             </div>
             <div>
               <label className="text-xs font-medium text-muted-foreground">Número</label>
-              <input value={form.numero} onChange={(e) => updateField("numero", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <input ref={numeroRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="text-xs font-medium text-muted-foreground">Bairro</label>
-              <input value={form.bairro} onChange={(e) => updateField("bairro", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <input ref={bairroRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
             </div>
             <div>
               <label className="text-xs font-medium text-muted-foreground">Cidade</label>
-              <input value={form.cidade} onChange={(e) => updateField("cidade", e.target.value)} placeholder="Goiânia" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <input ref={cidadeRef} defaultValue="" placeholder="Goiânia" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
             </div>
           </div>
           <div>
             <label className="text-xs font-medium text-muted-foreground">Complemento</label>
-            <input value={form.complemento} onChange={(e) => updateField("complemento", e.target.value)} placeholder="Apto, bloco, referência..." className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            <input ref={complementoRef} defaultValue="" placeholder="Apto, bloco, referência..." className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
           </div>
           <div>
             <label className="text-xs font-medium text-muted-foreground">Observações</label>
-            <textarea value={form.observacoes} onChange={(e) => updateField("observacoes", e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition resize-none" />
+            <textarea ref={observacoesRef} defaultValue="" rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition resize-none" />
           </div>
         </div>
       </div>
@@ -198,7 +191,7 @@ function DeliveryForm({
           <span className="font-bold">R$ {totalPrice.toFixed(2).replace(".", ",")}</span>
         </div>
         <button
-          onClick={() => onSend(whatsappText)}
+          onClick={() => onSend(buildWhatsappText())}
           className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 cursor-pointer"
         >
           Finalizar pedido no WhatsApp
