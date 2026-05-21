@@ -1,5 +1,5 @@
 import { useCart } from "@/lib/cart-context";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -27,6 +27,7 @@ export function CartSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
             <ShoppingBag className="size-4" />
             Carrinho {totalItems > 0 && `(${totalItems})`}
           </SheetTitle>
+          <SheetDescription className="sr-only">Itens do carrinho de compras</SheetDescription>
         </SheetHeader>
 
         {items.length === 0 ? (
