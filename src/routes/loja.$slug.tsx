@@ -4,7 +4,9 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
+import { useCart } from "@/lib/cart-context";
 import { ArrowLeft, Check } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/loja/$slug")({
   loader: ({ params }) => {
@@ -38,6 +40,7 @@ export const Route = createFileRoute("/loja/$slug")({
 function ProductPage() {
   const product = Route.useLoaderData();
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 3);
+  const { addItem } = useCart();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -65,12 +68,26 @@ function ProductPage() {
             </ul>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <button className="bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20">
+              <button
+                onClick={() => {
+                  addItem(product);
+                  toast("Adicionado ao carrinho", {
+                    description: product.name,
+                    action: { label: "Ver carrinho", onClick: () => {} },
+                  });
+                }}
+                className="bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 cursor-pointer"
+              >
                 Adicionar ao carrinho
               </button>
-              <button className="border border-foreground/15 hover:border-secondary px-7 py-3.5 rounded-xl font-heading font-semibold text-sm transition">
+              <a
+                href={`https://wa.me/5562983290822?text=${encodeURIComponent(`Olá! Quero comprar o ${product.name} (R$ ${product.price},00)`)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center border border-foreground/15 hover:border-secondary px-7 py-3.5 rounded-xl font-heading font-semibold text-sm transition"
+              >
                 Comprar agora
-              </button>
+              </a>
             </div>
 
             <div className="mt-10 border-t border-border pt-6 text-sm text-muted-foreground space-y-2">
