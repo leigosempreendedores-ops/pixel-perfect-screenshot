@@ -8,7 +8,7 @@ import { useCart } from "@/lib/cart-context";
 import { ArrowLeft, Check } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/loja/$slug")({
+export const Route = createFileRoute("/loja_/$slug")({
   loader: ({ params }) => {
     const p = products.find((p) => p.slug === params.slug);
     if (!p) throw notFound();
