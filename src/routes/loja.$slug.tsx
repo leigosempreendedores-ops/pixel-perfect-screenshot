@@ -40,7 +40,7 @@ export const Route = createFileRoute("/loja/$slug")({
 function ProductPage() {
   const product = Route.useLoaderData();
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 3);
-  const { addItem } = useCart();
+  const { addItem, openCartSheet } = useCart();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -75,7 +75,7 @@ function ProductPage() {
                     description: product.name,
                     action: {
                       label: "Ver carrinho",
-                      onClick: () => window.dispatchEvent(new Event("open-cart")),
+                      onClick: () => openCartSheet(),
                     },
                   });
                 }}

@@ -1,8 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X, ShoppingBag } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
-import { CartSheet } from "@/components/CartSheet";
 
 const links = [
   { to: "/", label: "Home" },
@@ -14,14 +13,7 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
-  const { totalItems } = useCart();
-
-  useEffect(() => {
-    const handler = () => setCartOpen(true);
-    window.addEventListener("open-cart", handler);
-    return () => window.removeEventListener("open-cart", handler);
-  }, []);
+  const { totalItems, openCartSheet } = useCart();
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/60">
@@ -44,7 +36,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-1">
           <button
-            onClick={() => setCartOpen(true)}
+            onClick={openCartSheet}
             className="relative p-2 text-foreground/80 hover:text-primary transition cursor-pointer"
           >
             <ShoppingBag className="size-5" />
@@ -63,7 +55,6 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
-      <CartSheet open={cartOpen} onOpenChange={setCartOpen} />
       {open && (
         <nav className="lg:hidden border-t border-border/60 bg-background">
           <div className="px-6 py-4 flex flex-col gap-3">
@@ -78,7 +69,7 @@ export function SiteHeader() {
               </Link>
             ))}
             <button
-              onClick={() => { setCartOpen(true); setOpen(false); }}
+              onClick={() => { openCartSheet(); setOpen(false); }}
               className="flex items-center gap-2 text-foreground/80 py-1 cursor-pointer"
             >
               <ShoppingBag className="size-4" /> Carrinho

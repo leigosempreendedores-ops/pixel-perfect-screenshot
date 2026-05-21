@@ -4,8 +4,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 
-export function CartSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
-  const { items, totalItems, totalPrice, removeItem, updateQuantity, clearCart } = useCart();
+export function CartSheet() {
+  const { items, totalItems, totalPrice, sheetOpen, closeCartSheet, removeItem, updateQuantity, clearCart } = useCart();
 
   const whatsappText =
     items.length > 0
@@ -20,7 +20,7 @@ export function CartSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
       : "";
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={sheetOpen} onOpenChange={(v) => { if (!v) closeCartSheet(); }}>
       <SheetContent className="flex flex-col w-full sm:max-w-md">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
@@ -36,7 +36,7 @@ export function CartSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
             <p className="text-muted-foreground">Seu carrinho está vazio</p>
             <Link
               to="/loja"
-              onClick={() => onOpenChange(false)}
+              onClick={() => closeCartSheet()}
               className="text-sm text-primary hover:underline"
             >
               Ver produtos
@@ -97,7 +97,7 @@ export function CartSheet({ open, onOpenChange }: { open: boolean; onOpenChange:
                 target="_blank"
                 rel="noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20"
-                onClick={() => onOpenChange(false)}
+                onClick={() => closeCartSheet()}
               >
                 Finalizar pedido no WhatsApp
               </a>
