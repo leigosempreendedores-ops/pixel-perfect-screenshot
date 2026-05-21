@@ -41,7 +41,7 @@ export function ProductCard({ product }: { product: Product }) {
             params={{ slug: product.slug }}
             className="flex-1 text-center border border-foreground/15 hover:border-secondary px-3 py-2 rounded-lg font-heading font-semibold text-xs transition"
           >
-            Ver Produto
+            VER
           </Link>
           <button
             onClick={() => {
