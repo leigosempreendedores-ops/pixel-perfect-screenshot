@@ -77,9 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "AL Bio Cosméticos Naturais" },
       { property: "og:description", content: "Cosméticos naturais artesanais e terapias capilares com Anna Lorena." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://leigosempreendedores-ops.github.io/pixel-perfect-screenshot/og-image.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: "https://leigosempreendedores-ops.github.io/pixel-perfect-screenshot/og-image.jpg" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
