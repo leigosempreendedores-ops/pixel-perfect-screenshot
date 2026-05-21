@@ -73,7 +73,10 @@ function ProductPage() {
                   addItem(product);
                   toast("Adicionado ao carrinho", {
                     description: product.name,
-                    action: { label: "Ver carrinho", onClick: () => {} },
+                    action: {
+                      label: "Ver carrinho",
+                      onClick: () => window.dispatchEvent(new Event("open-cart")),
+                    },
                   });
                 }}
                 className="bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 cursor-pointer"

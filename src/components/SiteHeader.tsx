@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, X, ShoppingBag } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "@/lib/cart-context";
 import { CartSheet } from "@/components/CartSheet";
 
@@ -16,6 +16,13 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const { totalItems } = useCart();
+
+  useEffect(() => {
+    const handler = () => setCartOpen(true);
+    window.addEventListener("open-cart", handler);
+    return () => window.removeEventListener("open-cart", handler);
+  }, []);
+
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/60">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
@@ -35,14 +42,14 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1">
           <button
             onClick={() => setCartOpen(true)}
-            className="relative hidden sm:inline-flex items-center gap-2 text-sm text-foreground/80 hover:text-primary cursor-pointer"
+            className="relative p-2 text-foreground/80 hover:text-primary transition cursor-pointer"
           >
-            <ShoppingBag className="size-4" /> Carrinho
+            <ShoppingBag className="size-5" />
             {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 size-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+              <span className="absolute top-0.5 right-0.5 size-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
                 {totalItems}
               </span>
             )}
@@ -70,6 +77,13 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
+            <button
+              onClick={() => { setCartOpen(true); setOpen(false); }}
+              className="flex items-center gap-2 text-foreground/80 py-1 cursor-pointer"
+            >
+              <ShoppingBag className="size-4" /> Carrinho
+              {totalItems > 0 && <span className="text-xs text-primary">({totalItems})</span>}
+            </button>
           </div>
         </nav>
       )}
