@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCart } from "@/lib/cart-context";
+import type { CartItem } from "@/lib/cart-context";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, memo, useId } from "react";
 
 export const Route = createFileRoute("/carrinho")({
   component: Carrinho,
@@ -85,7 +86,7 @@ function Carrinho() {
               </div>
             ))}
 
-            <DeliveryForm totalPrice={totalPrice} clearCart={clearCart} onSend={handleSubmit} />
+            <DeliveryForm items={items} totalPrice={totalPrice} clearCart={clearCart} onSend={handleSubmit} />
           </div>
         )}
       </section>
@@ -95,16 +96,18 @@ function Carrinho() {
   );
 }
 
-function DeliveryForm({
+const DeliveryForm = memo(function DeliveryForm({
+  items,
   totalPrice,
   clearCart,
   onSend,
 }: {
+  items: CartItem[];
   totalPrice: number;
   clearCart: () => void;
   onSend: (text: string) => void;
 }) {
-  const { items } = useCart();
+  const uid = useId();
   const nomeRef = useRef<HTMLInputElement>(null);
   const telefoneRef = useRef<HTMLInputElement>(null);
   const ruaRef = useRef<HTMLInputElement>(null);
@@ -146,41 +149,41 @@ function DeliveryForm({
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-xs font-medium text-muted-foreground">Nome completo</label>
-              <input ref={nomeRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <label htmlFor={`${uid}-nome`} className="text-xs font-medium text-muted-foreground">Nome completo</label>
+              <input id={`${uid}-nome`} ref={nomeRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary" />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground">Telefone / WhatsApp</label>
-              <input ref={telefoneRef} defaultValue="" placeholder="(62) 99999-0000" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <label htmlFor={`${uid}-tel`} className="text-xs font-medium text-muted-foreground">Telefone / WhatsApp</label>
+              <input id={`${uid}-tel`} ref={telefoneRef} defaultValue="" placeholder="(62) 99999-0000" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary" />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-[1fr_100px]">
             <div>
-              <label className="text-xs font-medium text-muted-foreground">Rua</label>
-              <input ref={ruaRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <label htmlFor={`${uid}-rua`} className="text-xs font-medium text-muted-foreground">Rua</label>
+              <input id={`${uid}-rua`} ref={ruaRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary" />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground">Número</label>
-              <input ref={numeroRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <label htmlFor={`${uid}-num`} className="text-xs font-medium text-muted-foreground">Número</label>
+              <input id={`${uid}-num`} ref={numeroRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary" />
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-xs font-medium text-muted-foreground">Bairro</label>
-              <input ref={bairroRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <label htmlFor={`${uid}-bairro`} className="text-xs font-medium text-muted-foreground">Bairro</label>
+              <input id={`${uid}-bairro`} ref={bairroRef} defaultValue="" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary" />
             </div>
             <div>
-              <label className="text-xs font-medium text-muted-foreground">Cidade</label>
-              <input ref={cidadeRef} defaultValue="" placeholder="Goiânia" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+              <label htmlFor={`${uid}-cidade`} className="text-xs font-medium text-muted-foreground">Cidade</label>
+              <input id={`${uid}-cidade`} ref={cidadeRef} defaultValue="" placeholder="Goiânia" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary" />
             </div>
           </div>
           <div>
-            <label className="text-xs font-medium text-muted-foreground">Complemento</label>
-            <input ref={complementoRef} defaultValue="" placeholder="Apto, bloco, referência..." className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
+            <label htmlFor={`${uid}-comp`} className="text-xs font-medium text-muted-foreground">Complemento</label>
+            <input id={`${uid}-comp`} ref={complementoRef} defaultValue="" placeholder="Apto, bloco, referência..." className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary" />
           </div>
           <div>
-            <label className="text-xs font-medium text-muted-foreground">Observações</label>
-            <textarea ref={observacoesRef} defaultValue="" rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition resize-none" />
+            <label htmlFor={`${uid}-obs`} className="text-xs font-medium text-muted-foreground">Observações</label>
+            <textarea id={`${uid}-obs`} ref={observacoesRef} defaultValue="" rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-hidden focus:border-primary resize-none" />
           </div>
         </div>
       </div>
@@ -192,7 +195,7 @@ function DeliveryForm({
         </div>
         <button
           onClick={() => onSend(buildWhatsappText())}
-          className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 cursor-pointer"
+          className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 shadow-md shadow-primary/20 cursor-pointer"
         >
           Finalizar pedido no WhatsApp
         </button>
@@ -205,4 +208,4 @@ function DeliveryForm({
       </div>
     </div>
   );
-}
+});
