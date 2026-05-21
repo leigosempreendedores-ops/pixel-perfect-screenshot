@@ -28,43 +28,22 @@ function Carrinho() {
     complemento: "",
     observacoes: "",
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitted, setSubmitted] = useState(false);
-
-  const required = ["nome", "telefone", "rua", "numero", "cidade"] as const;
-  const labels: Record<string, string> = {
-    nome: "Nome completo",
-    telefone: "Telefone",
-    rua: "Rua",
-    numero: "Número",
-    cidade: "Cidade",
-  };
-
-  const validate = () => {
-    const errs: Record<string, string> = {};
-    for (const field of required) {
-      if (!form[field].trim()) errs[field] = `${labels[field]} é obrigatório`;
-    }
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
-
-  const updateField = (field: string, value: string) => {
+  const updateField = (field: string, value: string) =>
     setForm((prev) => ({ ...prev, [field]: value }));
-    if (submitted && errors[field]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[field];
-        return next;
-      });
-    }
-  };
 
   const handleSubmit = () => {
-    setSubmitted(true);
-    if (!validate()) return;
     window.open(`https://wa.me/5562983290822?text=${whatsappText}`, "_blank", "noreferrer");
   };
+
+  const customerBlock = [
+    form.nome && `Nome: ${form.nome}`,
+    form.telefone && `Telefone: ${form.telefone}`,
+    (form.rua || form.numero) && `Endereço: ${form.rua}${form.numero ? `, ${form.numero}` : ""}`,
+    form.bairro && `Bairro: ${form.bairro}`,
+    form.cidade && `Cidade: ${form.cidade}`,
+    form.complemento && `Complemento: ${form.complemento}`,
+    form.observacoes && `Observações: ${form.observacoes}`,
+  ].filter(Boolean);
 
   const whatsappText = encodeURIComponent(
     `Olá! Gostaria de finalizar o pedido:\n\n${items
@@ -72,7 +51,7 @@ function Carrinho() {
         (i) =>
           `• ${i.product.name} (${i.quantity}x) — R$ ${(i.product.price * i.quantity).toFixed(2).replace(".", ",")}`,
       )
-      .join("\n")}\n\nTotal: R$ ${totalPrice.toFixed(2).replace(".", ",")}\n\n--- Dados do Cliente ---\nNome: ${form.nome}\nTelefone: ${form.telefone}\nEndereço: ${form.rua}, ${form.numero}${form.bairro ? `, ${form.bairro}` : ""}${form.complemento ? ` - ${form.complemento}` : ""}\nCidade: ${form.cidade}\n${form.observacoes ? `Observações: ${form.observacoes}` : ""}`,
+      .join("\n")}\n\nTotal: R$ ${totalPrice.toFixed(2).replace(".", ",")}${customerBlock.length ? `\n\n--- Dados do Cliente ---\n${customerBlock.join("\n")}` : ""}`,
   );
 
   return (
@@ -144,26 +123,22 @@ function Carrinho() {
                 <div className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="text-xs font-medium text-muted-foreground">Nome completo *</label>
-                      <input value={form.nome} onChange={(e) => updateField("nome", e.target.value)} className={`mt-1 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none transition ${errors.nome ? "border-destructive" : "border-input focus:border-primary"}`} />
-                      {errors.nome && <p className="text-xs text-destructive mt-1">{errors.nome}</p>}
+                      <label className="text-xs font-medium text-muted-foreground">Nome completo</label>
+                      <input value={form.nome} onChange={(e) => updateField("nome", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-muted-foreground">Telefone / WhatsApp *</label>
-                      <input value={form.telefone} onChange={(e) => updateField("telefone", e.target.value)} placeholder="(62) 99999-0000" className={`mt-1 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none transition ${errors.telefone ? "border-destructive" : "border-input focus:border-primary"}`} />
-                      {errors.telefone && <p className="text-xs text-destructive mt-1">{errors.telefone}</p>}
+                      <label className="text-xs font-medium text-muted-foreground">Telefone / WhatsApp</label>
+                      <input value={form.telefone} onChange={(e) => updateField("telefone", e.target.value)} placeholder="(62) 99999-0000" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
                     </div>
                   </div>
                   <div className="grid gap-4 sm:grid-cols-[1fr_100px]">
                     <div>
-                      <label className="text-xs font-medium text-muted-foreground">Rua *</label>
-                      <input value={form.rua} onChange={(e) => updateField("rua", e.target.value)} className={`mt-1 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none transition ${errors.rua ? "border-destructive" : "border-input focus:border-primary"}`} />
-                      {errors.rua && <p className="text-xs text-destructive mt-1">{errors.rua}</p>}
+                      <label className="text-xs font-medium text-muted-foreground">Rua</label>
+                      <input value={form.rua} onChange={(e) => updateField("rua", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-muted-foreground">Número *</label>
-                      <input value={form.numero} onChange={(e) => updateField("numero", e.target.value)} className={`mt-1 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none transition ${errors.numero ? "border-destructive" : "border-input focus:border-primary"}`} />
-                      {errors.numero && <p className="text-xs text-destructive mt-1">{errors.numero}</p>}
+                      <label className="text-xs font-medium text-muted-foreground">Número</label>
+                      <input value={form.numero} onChange={(e) => updateField("numero", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
                     </div>
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -172,9 +147,8 @@ function Carrinho() {
                       <input value={form.bairro} onChange={(e) => updateField("bairro", e.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-muted-foreground">Cidade *</label>
-                      <input value={form.cidade} onChange={(e) => updateField("cidade", e.target.value)} placeholder="Goiânia" className={`mt-1 w-full rounded-lg border bg-background px-3 py-2 text-sm outline-none transition ${errors.cidade ? "border-destructive" : "border-input focus:border-primary"}`} />
-                      {errors.cidade && <p className="text-xs text-destructive mt-1">{errors.cidade}</p>}
+                      <label className="text-xs font-medium text-muted-foreground">Cidade</label>
+                      <input value={form.cidade} onChange={(e) => updateField("cidade", e.target.value)} placeholder="Goiânia" className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition" />
                     </div>
                   </div>
                   <div>
