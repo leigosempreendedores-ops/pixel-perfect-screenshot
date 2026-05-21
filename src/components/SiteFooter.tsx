@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Phone, MapPin } from "lucide-react";
+import logoSrc from "@/assets/logo.jpg";
 
 export function SiteFooter() {
   return (
     <footer className="mt-24 bg-foreground text-background/90">
       <div className="mx-auto max-w-7xl px-6 py-16 grid gap-12 md:grid-cols-4">
         <div className="md:col-span-2">
-          <div className="font-display text-3xl">AL Bio</div>
+          <img src={logoSrc} alt="AL Bio" className="h-12 w-auto brightness-0 invert" />
           <p className="mt-4 max-w-sm text-background/70 leading-relaxed">
             Cosméticos naturais artesanais e terapias capilares com Anna Lorena.
             Cuidado verdadeiro, da raiz à ponta.

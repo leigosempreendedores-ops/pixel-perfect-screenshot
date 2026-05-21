@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
+import logoSrc from "@/assets/logo.jpg";
 
 const links = [
   { to: "/", label: "Home" },
@@ -19,8 +20,8 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/60">
       <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
-        <Link to="/" className="font-display text-2xl tracking-tight">
-          AL <span className="text-secondary italic">Bio</span>
+        <Link to="/" className="shrink-0">
+          <img src={logoSrc} alt="AL Bio" className="h-10 w-auto" />
         </Link>
         <nav className="hidden lg:flex items-center gap-8">
           {links.map((l) => (
