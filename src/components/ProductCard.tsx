@@ -2,11 +2,13 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import type { Product } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 import { toast } from "sonner";
-import { ShoppingBag, ArrowUp } from "lucide-react";
+import { ShoppingBag, ArrowUp, Check } from "lucide-react";
+import { useState } from "react";
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
   const navigate = useNavigate();
+  const [added, setAdded] = useState(false);
 
   return (
     <div className="group">
@@ -40,6 +42,7 @@ export function ProductCard({ product }: { product: Product }) {
           <button
             onClick={() => {
               addItem(product);
+              setAdded(true);
               toast("Adicionado ao carrinho", {
                 description: product.name,
                 action: {
@@ -47,11 +50,17 @@ export function ProductCard({ product }: { product: Product }) {
                   onClick: () => navigate({ to: "/carrinho" }),
                 },
               });
+              setTimeout(() => setAdded(false), 1200);
             }}
             className="size-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition cursor-pointer shrink-0"
             aria-label="Adicionar ao carrinho"
           >
-            <ShoppingBag className="size-4" />
+            <span className={`transition-transform duration-300 ${added ? "scale-0" : "scale-100"}`}>
+              <ShoppingBag className="size-4" />
+            </span>
+            <span className={`absolute transition-transform duration-300 ${added ? "scale-100" : "scale-0"}`}>
+              <Check className="size-5" />
+            </span>
           </button>
         </div>
       </div>
