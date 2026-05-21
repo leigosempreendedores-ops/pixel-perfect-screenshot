@@ -3,7 +3,7 @@ import { useCart } from "@/lib/cart-context";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/carrinho")({
@@ -18,7 +18,6 @@ export const Route = createFileRoute("/carrinho")({
 
 function Carrinho() {
   const { items, totalItems, totalPrice, removeItem, updateQuantity, clearCart } = useCart();
-  const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({
     nome: "",
     telefone: "",
@@ -113,15 +112,10 @@ function Carrinho() {
             ))}
 
             <div className="bg-card border border-border rounded-2xl mt-6">
-              <button
-                onClick={() => setShowForm((v) => !v)}
-                className="w-full flex items-center justify-between p-6 text-left cursor-pointer"
-              >
-                <span className="font-heading font-semibold">Dados de entrega</span>
-                {showForm ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
-              </button>
-              {showForm && (
-                <div className="px-6 pb-6 space-y-4">
+              <div className="p-6 pb-0">
+                <h2 className="font-heading font-semibold">Dados de entrega</h2>
+                <p className="text-xs text-muted-foreground mt-1 mb-6">Preencha para incluirmos no pedido</p>
+                <div className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label className="text-xs font-medium text-muted-foreground">Nome completo *</label>
@@ -161,8 +155,8 @@ function Carrinho() {
                     <textarea value={form.observacoes} onChange={(e) => updateField("observacoes", e.target.value)} rows={3} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary transition resize-none" />
                   </div>
                 </div>
-              )}
-              <div className="border-t border-border" />
+              </div>
+              <div className="border-t border-border mt-6" />
               <div className="p-6">
                 <div className="flex justify-between text-lg">
                   <span className="text-muted-foreground">Total</span>
