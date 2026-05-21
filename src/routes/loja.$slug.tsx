@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -40,7 +40,8 @@ export const Route = createFileRoute("/loja/$slug")({
 function ProductPage() {
   const product = Route.useLoaderData();
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 3);
-  const { addItem, openCartSheet } = useCart();
+  const { addItem } = useCart();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -75,7 +76,7 @@ function ProductPage() {
                     description: product.name,
                     action: {
                       label: "Ver carrinho",
-                      onClick: () => openCartSheet(),
+                      onClick: () => navigate({ to: "/carrinho" }),
                     },
                   });
                 }}

@@ -8,7 +8,6 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { CartProvider } from "@/lib/cart-context";
-import { CartSheet } from "@/components/CartSheet";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -116,7 +115,6 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <Outlet />
-        <CartSheet />
         <Toaster />
       </CartProvider>
     </QueryClientProvider>

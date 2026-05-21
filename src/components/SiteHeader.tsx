@@ -6,6 +6,7 @@ import { useCart } from "@/lib/cart-context";
 const links = [
   { to: "/", label: "Home" },
   { to: "/loja", label: "Loja" },
+  { to: "/carrinho", label: "Carrinho" },
   { to: "/sobre", label: "Sobre Anna Lorena" },
   { to: "/terapias", label: "Terapias Capilares" },
   { to: "/contato", label: "Contato" },
@@ -13,7 +14,7 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { totalItems, openCartSheet } = useCart();
+  const { totalItems } = useCart();
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/60">
@@ -35,9 +36,9 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-1">
-          <button
-            onClick={openCartSheet}
-            className="relative p-2 text-foreground/80 hover:text-primary transition cursor-pointer"
+          <Link
+            to="/carrinho"
+            className="relative p-2 text-foreground/80 hover:text-primary transition"
           >
             <ShoppingBag className="size-5" />
             {totalItems > 0 && (
@@ -45,7 +46,7 @@ export function SiteHeader() {
                 {totalItems}
               </span>
             )}
-          </button>
+          </Link>
           <button
             className="lg:hidden p-2"
             onClick={() => setOpen((v) => !v)}
@@ -68,13 +69,6 @@ export function SiteHeader() {
                 {l.label}
               </Link>
             ))}
-            <button
-              onClick={() => { openCartSheet(); setOpen(false); }}
-              className="flex items-center gap-2 text-foreground/80 py-1 cursor-pointer"
-            >
-              <ShoppingBag className="size-4" /> Carrinho
-              {totalItems > 0 && <span className="text-xs text-primary">({totalItems})</span>}
-            </button>
           </div>
         </nav>
       )}
