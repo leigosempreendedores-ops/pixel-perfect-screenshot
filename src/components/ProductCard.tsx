@@ -2,7 +2,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import type { Product } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 import { toast } from "sonner";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, ArrowUp } from "lucide-react";
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
@@ -39,9 +39,10 @@ export function ProductCard({ product }: { product: Product }) {
           <Link
             to="/loja/$slug"
             params={{ slug: product.slug }}
-            className="flex-1 text-center border border-foreground/15 hover:border-secondary px-3 py-2 rounded-lg font-heading font-semibold text-xs transition"
+            className="size-12 flex flex-col items-center justify-center rounded-full border border-foreground/15 hover:border-secondary hover:text-secondary transition shrink-0"
           >
-            VER
+            <ArrowUp className="size-3" />
+            <span className="font-heading font-semibold text-[9px] leading-none mt-0.5">VER</span>
           </Link>
           <button
             onClick={() => {
