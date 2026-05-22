@@ -5,7 +5,7 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/data/products";
 import { Leaf, Droplet, Flower2, Sparkles, ArrowRight, Quote } from "lucide-react";
-import hero from "@/assets/hero.jpg";
+import heroVideo from "@/assets/hero-video.mp4";
 import anna from "@/assets/anna.jpg";
 
 export const Route = createFileRoute("/")({
@@ -66,11 +66,12 @@ function Home() {
           </div>
           <div className="relative">
             <div className="absolute -inset-6 bg-gradient-to-br from-secondary/20 to-primary/10 rounded-[2rem] -z-10 blur-2xl" />
-            <img
-              src={hero}
-              alt="Cosméticos naturais AL Bio com folhas de eucalipto e alecrim"
-              width={1536}
-              height={1024}
+            <video
+              src={heroVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
               className="rounded-2xl shadow-2xl shadow-foreground/10 object-cover aspect-[4/3] w-full"
             />
             <div className="absolute -bottom-6 -left-6 bg-card border border-border rounded-xl p-4 shadow-xl max-w-[220px] hidden md:block">
