@@ -45,7 +45,7 @@ export function SiteFooter() {
       <div className="border-t border-background/10">
         <div className="mx-auto max-w-7xl px-6 py-6 text-xs text-background/60 flex justify-between">
           <span>© {new Date().getFullYear()} AL Bio Cosméticos Naturais</span>
-          <span>Feito à mão, com a natureza.</span>
+          <a href="https://aspec.ia.br" target="_blank" rel="noreferrer" className="hover:text-[color:var(--gold)] transition-colors">ASPEC iA Soluções em Tecnologia</a>
         </div>
       </div>
     </footer>
