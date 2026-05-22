@@ -79,7 +79,7 @@ function Terapias() {
             rel="noreferrer"
             className="mt-8 inline-flex items-center gap-2 bg-[color:var(--gold)] text-foreground px-8 py-3.5 rounded-xl font-heading font-semibold text-sm hover:opacity-90 transition"
           >
-            Agendar pelo WhatsApp <ArrowRight className="size-4" />
+            Fale comigo pelo WhatsApp <ArrowRight className="size-4" />
           </a>
         </div>
       </section>
