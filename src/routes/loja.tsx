@@ -16,7 +16,7 @@ export const Route = createFileRoute("/loja")({
   }),
 });
 
-const categorias = ["Todos", "Shampoos Sólidos", "Condicionadores", "Óleos Terapêuticos", "Tônicos Capilares"];
+const categorias = ["Todos", "Sabonetes Artesanais", "Shampoos Sólidos", "Condicionadores", "Óleos Terapêuticos", "Tônicos Capilares"];
 
 function Loja() {
   const [cat, setCat] = useState("Todos");
@@ -28,7 +28,7 @@ function Loja() {
       <header className="border-b border-border/60 bg-[color:var(--cream)]">
         <div className="mx-auto max-w-7xl px-6 py-16">
           <p className="text-xs uppercase tracking-[0.25em] text-secondary font-heading font-semibold">Loja</p>
-          <h1 className="mt-3 font-display text-5xl md:text-6xl">Rituais para seus cabelos</h1>
+          <h1 className="mt-3 font-display text-5xl md:text-6xl">Cabelos e Pele</h1>
           <p className="mt-4 max-w-xl text-muted-foreground">
             Produzidos em pequenos lotes, com ingredientes botânicos selecionados.
           </p>
