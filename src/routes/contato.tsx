@@ -54,7 +54,7 @@ function Contato() {
               href="https://wa.me/5562983290822"
               target="_blank"
               rel="noreferrer"
-              className="mt-3 w-full flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-8 py-3.5 rounded-xl font-heading font-semibold text-sm hover:opacity-90 transition"
+              className="w-full sm:w-auto bg-primary text-primary-foreground px-8 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 inline-flex items-center justify-center"
             >
               Vamos conversar no WhatsApp?
             </a>
