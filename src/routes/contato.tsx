@@ -50,15 +50,15 @@ function Contato() {
             <button className="w-full sm:w-auto bg-primary text-primary-foreground px-8 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20">
               {sent ? "Enviado — obrigada!" : "Enviar mensagem"}
             </button>
-            <a
-              href="https://wa.me/5562983290822"
-              target="_blank"
-              rel="noreferrer"
-              className="w-full sm:w-auto bg-primary text-primary-foreground px-8 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 inline-flex items-center justify-center"
-            >
-              Vamos conversar no WhatsApp?
-            </a>
           </form>
+          <a
+            href="https://wa.me/5562983290822"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 w-full sm:w-auto bg-primary text-primary-foreground px-8 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20 inline-flex items-center justify-center"
+          >
+            Vamos conversar no WhatsApp?
+          </a>
 
           <aside className="space-y-6">
             <div className="bg-[color:var(--cream)] rounded-2xl p-6">
