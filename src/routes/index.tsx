@@ -189,7 +189,7 @@ function Home() {
             rel="noreferrer"
             className="mt-8 inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-3.5 rounded-xl font-heading font-semibold text-sm hover:bg-primary/90 transition shadow-md shadow-primary/20"
           >
-            Agendar pelo WhatsApp <ArrowRight className="size-4" />
+            Fale comigo pelo WhatsApp <ArrowRight className="size-4" />
           </a>
         </div>
       </section>
