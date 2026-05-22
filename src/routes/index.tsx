@@ -35,7 +35,7 @@ function Home() {
         <div className="mx-auto max-w-7xl px-6 pt-16 pb-24 lg:pt-24 lg:pb-32 grid gap-12 lg:grid-cols-2 items-center">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-secondary font-heading font-semibold">
-              AL Bio · Anna Lorena
+              AL Bio — Por Anna Lorena
             </p>
             <h1 className="mt-5 font-display text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-balance">
               Cuidado <em className="italic font-normal text-secondary">natural</em> para seus cabelos.
