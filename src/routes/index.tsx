@@ -106,7 +106,7 @@ function Home() {
         <div className="flex items-end justify-between gap-4 mb-12">
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-secondary font-heading font-semibold">Mais procurados</p>
-            <h2 className="mt-3 font-display text-4xl md:text-5xl">Rituais em destaque</h2>
+            <h2 className="mt-3 font-display text-4xl md:text-5xl">Em destaque</h2>
           </div>
           <Link to="/loja" className="hidden sm:inline text-sm text-primary hover:underline">
             Ver toda a loja →
