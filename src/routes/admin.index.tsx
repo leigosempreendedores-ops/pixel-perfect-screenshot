@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useAdmin } from "@/lib/admin-context";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminLogin,
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/admin/")({
 function AdminLogin() {
   const { authed, login } = useAdmin();
   const navigate = useNavigate();
-  const [pass, setPass] = useState("");
+  const passRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState(false);
 
   if (authed) {
@@ -25,19 +25,20 @@ function AdminLogin() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (login(pass)) {
+            const val = passRef.current?.value ?? "";
+            if (login(val)) {
               navigate({ to: "/admin/dashboard", replace: true });
             } else {
               setError(true);
-              setPass("");
+              if (passRef.current) passRef.current.value = "";
             }
           }}
           className="mt-6 space-y-4"
         >
           <input
+            ref={passRef}
             type="password"
-            value={pass}
-            onChange={(e) => { setPass(e.target.value); setError(false); }}
+            defaultValue=""
             placeholder="Senha"
             autoFocus
             className="w-full rounded-lg border border-input bg-background px-4 py-3 text-sm focus:outline-none focus:border-primary"

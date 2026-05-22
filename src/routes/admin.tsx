@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, Link, useLocation } from "@tanstack/react-router";
-import { useAdmin } from "@/lib/admin-context";
+import { useAdmin, AdminProvider } from "@/lib/admin-context";
 import { LayoutDashboard, Package, ShoppingCart, Lock, LogOut, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
@@ -9,13 +9,21 @@ export const Route = createFileRoute("/admin")({
   }),
 });
 
+function AdminLayout() {
+  return (
+    <AdminProvider>
+      <AdminLayoutInner />
+    </AdminProvider>
+  );
+}
+
 const nav = [
   { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/admin/produtos", label: "Produtos", icon: Package },
   { to: "/admin/pedidos", label: "Pedidos", icon: ShoppingCart },
 ];
 
-function AdminLayout() {
+function AdminLayoutInner() {
   const { authed, logout } = useAdmin();
   const path = useLocation().pathname;
 
